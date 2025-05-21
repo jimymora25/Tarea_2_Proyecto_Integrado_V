@@ -73,8 +73,16 @@ jobs:
           # Añade cualquier otro cambio no especificado (sin forzar)
           git add .
           
-          # Crea un commit si hay cambios. Si no hay, el comando '|| echo' previene un error.
-          git commit -m "Actualizar datos, enriquecimiento y modelo (Tarea 2 automatizada)" || echo "No hay cambios para commitear"
+          # Crea un commit si hay cambios. Si no hay, el comando '|| true' previene un error.
+          # Esto es importante para que el workflow no falle si no hay nuevos datos.
+          git commit -m "Actualizar datos, enriquecimiento y modelo (Tarea 2 automatizada)" || true
+          
+          # --- ¡LA SOLUCIÓN CLAVE PARA EL ERROR 'non-fast-forward'! ---
+          # Antes de intentar hacer push, traemos los últimos cambios del remoto y los rebaseamos.
+          # Esto asegura que el historial local del workflow esté al día con el remoto,
+          # evitando el rechazo del push.
+          git pull --rebase origin main
           
           # Sube los cambios a la rama 'main' de tu repositorio
+          # Si el 'pull --rebase' fue exitoso y hubo cambios, este push debería funcionar.
           git push origin main
