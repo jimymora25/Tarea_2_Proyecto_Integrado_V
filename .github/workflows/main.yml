@@ -61,8 +61,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # Añade todos los archivos que pueden haber sido modificados o creados
-          # Usamos '-f' para forzar la adición de archivos ignorados por .gitignore
+          # Añade los archivos generados, forzando si están ignorados
           git add -f src/proyecto/static/data/historical.db \
                      -f src/proyecto/static/data/historical.csv \
                      -f src/proyecto/static/data/enriched_historical.db \
@@ -71,11 +70,16 @@ jobs:
                      -f src/proyecto/static/models/enricher.log \
                      -f src/proyecto/static/models/modeller.log
           
-          # Añade cualquier otro cambio no especificado (sin forzar, para archivos no ignorados)
+          # Añade cualquier otro cambio no especificado (sin forzar)
           git add .
           
           # Crea un commit si hay cambios. Si no hay, el comando '|| echo' previene un error.
-          git commit -m "Actualizar datos, enriquecimiento y modelo (Tarea 2 automatizada)" || echo "No hay cambios para commitear"
+          git commit -m "Actualizar datos, enriquecimiento y modelo (Tarea 2 automatizada)" || true
+          
+          # --- ¡CAMBIO CRÍTICO AQUÍ! ---
+          # Antes de intentar hacer push, traemos los últimos cambios del remoto y los rebaseamos.
+          # Esto evita el error "non-fast-forward" si el remoto se ha actualizado.
+          git pull --rebase origin main
           
           # Sube los cambios a la rama 'main' de tu repositorio
           git push origin main
