@@ -24,7 +24,10 @@ jobs:
       - name: 1. Checkout del código
         uses: actions/checkout@v4 # Descarga el código de tu repositorio
         with:
-          fetch-depth: 0 # Necesario para que Git pueda hacer commits y pushes
+          # No necesitamos fetch-depth: 0 si vamos a forzar el push de los artefactos
+          # y no estamos fusionando historiales complejos.
+          # Sin embargo, lo mantendremos por si acaso el futuro.
+          fetch-depth: 0 
 
       - name: 2. Configurar Python 3.9
         uses: actions/setup-python@v5 # Configura el entorno Python
@@ -61,7 +64,8 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # Añade los archivos generados, forzando si están ignorados
+          # Añade los archivos generados, forzando su adición a pesar de .gitignore
+          # NO USAMOS 'git add .' aquí para evitar conflictos con otros archivos de código
           git add -f src/proyecto/static/data/historical.db \
                      -f src/proyecto/static/data/historical.csv \
                      -f src/proyecto/static/data/enriched_historical.db \
@@ -70,16 +74,18 @@ jobs:
                      -f src/proyecto/static/models/enricher.log \
                      -f src/proyecto/static/models/modeller.log
           
-          # Añade cualquier otro cambio no especificado (sin forzar)
-          git add .
-          
-          # Crea un commit si hay cambios. Si no hay, el comando '|| echo' previene un error.
+          # Crea un commit SOLO si hay cambios en los archivos añadidos.
+          # El '|| true' es importante para que el paso no falle si no hay cambios.
           git commit -m "Actualizar datos, enriquecimiento y modelo (Tarea 2 automatizada)" || true
           
           # --- ¡CAMBIO CRÍTICO AQUÍ! ---
-          # Antes de intentar hacer push, traemos los últimos cambios del remoto y los rebaseamos.
-          # Esto evita el error "non-fast-forward" si el remoto se ha actualizado.
-          git pull --rebase origin main
-          
-          # Sube los cambios a la rama 'main' de tu repositorio
-          git push origin main
+          # Si el commit fue exitoso (es decir, hubo cambios), entonces hacemos un push.
+          # Usamos 'git push --force-with-lease' para sobrescribir los archivos generados
+          # Esto es más seguro que un 'git push --force' puro.
+          # Solo se hace push si el commit anterior no fue 'no changes to commit'.
+          if git diff --cached --exit-code; then
+              echo "No hay cambios para subir."
+          else
+              echo "Subiendo cambios..."
+              git push --force-with-lease origin main
+          fi
