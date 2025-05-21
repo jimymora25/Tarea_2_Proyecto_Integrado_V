@@ -37,17 +37,17 @@ jobs:
           pip install -r requirements.txt # Instala todas las bibliotecas de tu requirements.txt
 
       - name: 4. Ejecutar script de recolección de datos (Collector)
-        # Ruta corregida: asumiendo que collector.py está directamente en src/
+        # RUTA CORREGIDA para collector.py
         run: |
-          python src/collector.py
+          python src/proyecto/static/models/collector.py
 
       - name: 5. Ejecutar script de enriquecimiento de datos (Enricher)
-        # Nuevo paso para el enriquecimiento
+        # Ruta para enricher.py
         run: |
           python src/enricher.py
 
       - name: 6. Ejecutar script de modelado (Modeller)
-        # Nuevo paso para el entrenamiento del modelo
+        # Ruta para modeller.py
         run: |
           python src/modeller.py
 
@@ -62,7 +62,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           
           # Añade todos los archivos que pueden haber sido modificados o creados
-          # Esto incluye los archivos de datos, el modelo y los logs
+          # Rutas de los archivos generados por Collector, Enricher y Modeller
           git add src/proyecto/static/data/historical.db \
                     src/proyecto/static/data/historical.csv \
                     src/proyecto/static/data/enriched_historical.db \
@@ -70,7 +70,7 @@ jobs:
                     src/proyecto/static/models/collector.log \
                     src/proyecto/static/models/enricher.log \
                     src/proyecto/static/models/modeller.log \
-                    .
+                    . # Añade cualquier otro cambio no especificado
           
           # Crea un commit si hay cambios. Si no hay, el comando '|| echo' previene un error.
           git commit -m "Actualizar datos, enriquecimiento y modelo (Tarea 2 automatizada)" || echo "No hay cambios para commitear"
