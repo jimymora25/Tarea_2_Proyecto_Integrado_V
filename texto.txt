@@ -1,0 +1,56 @@
+Para abrir el streamlit:
+trabaje dentro de la carpeta ProyectoIntegrado5.
+active el enviroment
+ejecute todo el codigo: collector.py, enricher.py, modeller.py, dashboard.
+
+Guía de Ejecución del Proyecto Integrado 5
+Este documento describe los pasos necesarios para ejecutar el pipeline completo del proyecto, desde la recolección de datos hasta la visualización del dashboard interactivo. Asegúrate de tener Windows PowerShell como tu terminal.
+1. Navegar a la Carpeta Raíz del Proyecto
+Abre tu terminal de PowerShell y usa el siguiente comando para dirigirte a la carpeta principal de tu proyecto (ProyectoIntegrado5).
+cd "C:\Users\Usuario\Desktop\IUDigital_2025\Semestre 8 bloque 2 visualizacion y proyecto V\Proyecto_Integrado_V\Carpeta jimy\Tareas\Tarea 2\ProyectoIntegrado5"
+
+
+Verificación: Tu prompt de la terminal debe mostrar la ruta de tu proyecto, por ejemplo: PS C:\Users\Usuario\Desktop\...\ProyectoIntegrado5>
+2. Activar el Entorno Virtual
+Activa el entorno virtual (.venv) para asegurar que todas las bibliotecas del proyecto se utilicen correctamente.
+& ".\.venv\Scripts\activate"
+
+
+Verificación: Tu prompt de la terminal debe mostrar (.venv) al principio, por ejemplo: (.venv) PS C:\Users\Usuario\Desktop\...\ProyectoIntegrado5>
+3. Instalar Dependencias (Opcional)
+Si es la primera vez que configuras el entorno o si has actualizado el archivo requirements.txt, ejecuta este comando para instalar o actualizar las bibliotecas necesarias.
+pip install -r requirements.txt
+
+
+Verificación: Verás mensajes de instalación. Si ya están instaladas, indicará "Requirement already satisfied".
+4. Ejecutar el Script collector.py (Recolección de Datos)
+Este script se encarga de obtener los datos históricos de precios de la criptomoneda y guardarlos en historical.db y historical.csv.
+python src/collector.py
+
+
+Verificación: Observa los mensajes en la terminal que indican la obtención y el guardado de los datos. Espera a que el script termine completamente.
+5. Ejecutar el Script enricher.py (Enriquecimiento de Datos)
+Después de la recolección, este script procesa los datos históricos, añadiéndoles características temporales (año, mes, día, etc.) y los guarda en enriched_historical.db.
+python src/enricher.py
+
+
+Verificación: La terminal mostrará mensajes sobre la carga y el guardado de los datos enriquecidos. Espera a que el script termine.
+6. Ejecutar el Script modeller.py (Entrenamiento del Modelo)
+Este script utiliza los datos enriquecidos para entrenar el modelo de predicción y guarda el modelo entrenado como model.pkl.
+python src/modeller.py
+
+
+Verificación: Verás mensajes sobre el entrenamiento del modelo, el RMSE obtenido, y la confirmación de que el modelo ha sido guardado. Espera a que el script termine.
+7. Ejecutar el Dashboard de Streamlit (dashboard.py)
+Finalmente, este comando iniciará tu aplicación web interactiva.
+streamlit run src/dashboard.py
+
+
+Verificación:
+La terminal mostrará URLs locales (ej. http://localhost:8501).
+Tu navegador web predeterminado se abrirá automáticamente en esa URL.
+El dashboard mostrará los datos históricos, un gráfico interactivo, la predicción para el día siguiente y, si se configuró, los detalles del modelo.
+Notas Importantes:
+Ejecuta cada comando individualmente y espera a que el anterior finalice.
+Si encuentras algún error en la terminal, cópialo y pégalo para obtener ayuda.
+Asegúrate de que tus archivos .py estén actualizados con las últimas versiones proporcionadas.
