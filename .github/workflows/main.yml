@@ -37,7 +37,7 @@ jobs:
           pip install -r requirements.txt # Instala todas las bibliotecas de tu requirements.txt
 
       - name: 4. Ejecutar script de recolección de datos (Collector)
-        # RUTA CORREGIDA para collector.py
+        # RUTA CORREGIDA: asumiendo que collector.py está en src/proyecto/static/models/
         run: |
           python src/proyecto/static/models/collector.py
 
@@ -62,15 +62,17 @@ jobs:
           git config --local user.name "github-actions[bot]"
           
           # Añade todos los archivos que pueden haber sido modificados o creados
-          # Rutas de los archivos generados por Collector, Enricher y Modeller
-          git add src/proyecto/static/data/historical.db \
-                    src/proyecto/static/data/historical.csv \
-                    src/proyecto/static/data/enriched_historical.db \
-                    src/proyecto/static/models/model.pkl \
-                    src/proyecto/static/models/collector.log \
-                    src/proyecto/static/models/enricher.log \
-                    src/proyecto/static/models/modeller.log \
-                    . # Añade cualquier otro cambio no especificado
+          # Usamos '-f' para forzar la adición de archivos ignorados por .gitignore
+          git add -f src/proyecto/static/data/historical.db \
+                     -f src/proyecto/static/data/historical.csv \
+                     -f src/proyecto/static/data/enriched_historical.db \
+                     -f src/proyecto/static/models/model.pkl \
+                     -f src/proyecto/static/models/collector.log \
+                     -f src/proyecto/static/models/enricher.log \
+                     -f src/proyecto/static/models/modeller.log
+          
+          # Añade cualquier otro cambio no especificado (sin forzar, para archivos no ignorados)
+          git add .
           
           # Crea un commit si hay cambios. Si no hay, el comando '|| echo' previene un error.
           git commit -m "Actualizar datos, enriquecimiento y modelo (Tarea 2 automatizada)" || echo "No hay cambios para commitear"
