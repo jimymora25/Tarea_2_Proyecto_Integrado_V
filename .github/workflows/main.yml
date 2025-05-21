@@ -1,0 +1,79 @@
+name: Actualizar Datos y Modelo ETH
+
+permissions:
+  contents: write # Permite que el workflow escriba en el repositorio (para los commits)
+
+on:
+  schedule:
+    # Ejecuta el workflow todos los días a medianoche (UTC).
+    # Puedes ajustar la frecuencia si lo deseas.
+    - cron: '0 0 * * *'
+  push:
+    # Ejecuta el workflow cada vez que se hace un push a la rama 'main'.
+    branches:
+      - main
+  workflow_dispatch:
+    # Permite ejecutar el workflow manualmente desde la interfaz de GitHub.
+
+# Jobs a ejecutar
+jobs:
+  actualizar_datos_y_modelo: # Renombrado el job para reflejar su nueva función
+    runs-on: ubuntu-latest # Ejecuta el job en un entorno Ubuntu
+
+    steps:
+      - name: 1. Checkout del código
+        uses: actions/checkout@v4 # Descarga el código de tu repositorio
+        with:
+          fetch-depth: 0 # Necesario para que Git pueda hacer commits y pushes
+
+      - name: 2. Configurar Python 3.9
+        uses: actions/setup-python@v5 # Configura el entorno Python
+        with:
+          python-version: '3.9' # Especifica la versión de Python a usar
+
+      - name: 3. Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip # Asegura que pip esté actualizado
+          pip install -r requirements.txt # Instala todas las bibliotecas de tu requirements.txt
+
+      - name: 4. Ejecutar script de recolección de datos (Collector)
+        # Ruta corregida: asumiendo que collector.py está directamente en src/
+        run: |
+          python src/collector.py
+
+      - name: 5. Ejecutar script de enriquecimiento de datos (Enricher)
+        # Nuevo paso para el enriquecimiento
+        run: |
+          python src/enricher.py
+
+      - name: 6. Ejecutar script de modelado (Modeller)
+        # Nuevo paso para el entrenamiento del modelo
+        run: |
+          python src/modeller.py
+
+      - name: 7. Listar archivos y directorios (para depuración)
+        # Útil para verificar que los archivos se están creando en las rutas esperadas
+        run: ls -lR
+
+      - name: 8. Commit y subir cambios
+        run: |
+          # Configura la identidad de Git para el commit automático
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Añade todos los archivos que pueden haber sido modificados o creados
+          # Esto incluye los archivos de datos, el modelo y los logs
+          git add src/proyecto/static/data/historical.db \
+                    src/proyecto/static/data/historical.csv \
+                    src/proyecto/static/data/enriched_historical.db \
+                    src/proyecto/static/models/model.pkl \
+                    src/proyecto/static/models/collector.log \
+                    src/proyecto/static/models/enricher.log \
+                    src/proyecto/static/models/modeller.log \
+                    .
+          
+          # Crea un commit si hay cambios. Si no hay, el comando '|| echo' previene un error.
+          git commit -m "Actualizar datos, enriquecimiento y modelo (Tarea 2 automatizada)" || echo "No hay cambios para commitear"
+          
+          # Sube los cambios a la rama 'main' de tu repositorio
+          git push origin main
