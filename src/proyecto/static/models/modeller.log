@@ -274,3 +274,6 @@
 2025-08-15 00:58:20,390 - DataModeller - INFO - ✅ 1825 registros enriquecidos cargados para el modelado.
 2025-08-15 00:58:20,398 - DataModeller - INFO - ✅ Modelo entrenado. RMSE en el conjunto de prueba: 44.18
 2025-08-15 00:58:20,399 - DataModeller - INFO - ✅ Modelo guardado en: /home/runner/work/Tarea_2_Proyecto_Integrado_V/Tarea_2_Proyecto_Integrado_V/src/proyecto/static/models/model.pkl
+2025-08-16 00:55:18,405 - DataModeller - INFO - ✅ 1825 registros enriquecidos cargados para el modelado.
+2025-08-16 00:55:18,410 - DataModeller - INFO - ✅ Modelo entrenado. RMSE en el conjunto de prueba: 44.18
+2025-08-16 00:55:18,411 - DataModeller - INFO - ✅ Modelo guardado en: /home/runner/work/Tarea_2_Proyecto_Integrado_V/Tarea_2_Proyecto_Integrado_V/src/proyecto/static/models/model.pkl
