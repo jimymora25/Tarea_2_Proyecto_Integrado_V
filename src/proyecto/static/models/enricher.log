@@ -907,3 +907,6 @@
 2026-03-14 01:10:43,931 - DataEnricher - INFO - ✅ 1825 registros cargados desde la base de datos histórica.
 2026-03-14 01:10:43,968 - DataEnricher - INFO - ✅ Datos enriquecidos con variables temporales (año, mes, día, día de la semana, trimestre).
 2026-03-14 01:10:43,982 - DataEnricher - INFO - ✅ Datos enriquecidos guardados en: /home/runner/work/Tarea_2_Proyecto_Integrado_V/Tarea_2_Proyecto_Integrado_V/src/proyecto/static/data/enriched_historical.db
+2026-03-15 01:22:43,036 - DataEnricher - INFO - ✅ 1825 registros cargados desde la base de datos histórica.
+2026-03-15 01:22:43,073 - DataEnricher - INFO - ✅ Datos enriquecidos con variables temporales (año, mes, día, día de la semana, trimestre).
+2026-03-15 01:22:43,086 - DataEnricher - INFO - ✅ Datos enriquecidos guardados en: /home/runner/work/Tarea_2_Proyecto_Integrado_V/Tarea_2_Proyecto_Integrado_V/src/proyecto/static/data/enriched_historical.db
